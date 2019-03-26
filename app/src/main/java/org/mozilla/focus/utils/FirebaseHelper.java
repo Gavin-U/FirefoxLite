@@ -72,7 +72,7 @@ final public class FirebaseHelper {
     static final String NEWLINE_PLACE_HOLDER = "<BR>";
 
     @SuppressFBWarnings(value = "MS_CANNOT_BE_FINAL", justification = "Abstract class can be replaced with an empty implementation. But I'm not determined to do it.")
-    public static FirebaseContract firebaseContract;
+    private static FirebaseContract firebaseContract;
 
     private FirebaseHelper() {
     }
@@ -84,7 +84,10 @@ final public class FirebaseHelper {
         }
         firebaseContract.setRemoteConfigDefault(contract.getRemoteConfigDefault());
 
-        enableFirebase(context.getApplicationContext(), enabled);
+        initFirebase(context.getApplicationContext());
+
+        enableAnalytics(context.getApplicationContext(), enabled);
+
     }
 
     static String prettify(String string) {
@@ -110,20 +113,36 @@ final public class FirebaseHelper {
         return new FirebaseImpl(fromResourceString(context));
     }
 
-    /**
-     * @param applicationContext Should be application context. It's used for component enable/disable, and
-     * @param enable  A boolean to determine if we should enable Firebase or not
-     * @return Return true if a new runnable is created. otherwise return false.I need this return value for testing (as the return value of bind() method)
-     */
-    public static void enableFirebase(final Context applicationContext, final boolean enable) {
+    @NonNull
+    public static FirebaseContract getFirebase() {
+
+        checkFirebaseInitState();
+
+        return firebaseContract;
+    }
+
+    public static void enableAnalytics(final Context applicationContext, final boolean enable) {
+
+        checkFirebaseInitState();
 
         // applicationContext is nullable for unit tests
-        if (firebaseContract == null || applicationContext == null) {
+        if (applicationContext == null) {
+            return;
+        }
+
+        firebaseContract.enableAnalytics(applicationContext, enable);
+    }
+
+    private static void initFirebase(final Context applicationContext) {
+
+        checkFirebaseInitState();
+
+        // applicationContext is nullable for unit tests
+        if (applicationContext == null) {
             return;
         }
         firebaseContract.setDeveloperModeEnabled(AppConstants.isFirebaseBuild());
         firebaseContract.init(applicationContext);
-        firebaseContract.enableAnalytics(applicationContext, enable);
         firebaseContract.enableCloudMessaging(applicationContext, RocketMessagingService.class.getName(), true);
         firebaseContract.enableRemoteConfig(applicationContext, () -> {
             ThreadUtils.postToBackgroundThread(() -> {
@@ -187,5 +206,11 @@ final public class FirebaseHelper {
         map.put(FirebaseHelper.ENABLE_LIFE_FEED, AppConfigWrapper.LIFE_FEED_ENABLED_DEFAULT);
 
         return map;
+    }
+
+    private static void checkFirebaseInitState() {
+        if (firebaseContract == null) {
+            throw new IllegalStateException("Firebase Helper not initialized");
+        }
     }
 }

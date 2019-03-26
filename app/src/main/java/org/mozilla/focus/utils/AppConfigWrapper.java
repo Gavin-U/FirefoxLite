@@ -5,8 +5,6 @@
 
 package org.mozilla.focus.utils;
 
-import android.content.Context;
-
 public class AppConfigWrapper {
     static final int SURVEY_NOTIFICATION_POST_THRESHOLD = 3;
     static final boolean PRIVATE_MODE_ENABLED_DEFAULT = true;
@@ -17,20 +15,20 @@ public class AppConfigWrapper {
     static final int DRIVE_DEFAULT_BROWSER_FROM_MENU_SETTING_THRESHOLD = 2;
 
     public static long getRateAppNotificationLaunchTimeThreshold() {
-        return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.RATE_APP_NOTIFICATION_THRESHOLD);
+        return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.RATE_APP_NOTIFICATION_THRESHOLD);
     }
 
     public static long getShareDialogLaunchTimeThreshold(final boolean needExtend) {
         if (needExtend) {
-            return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.SHARE_APP_DIALOG_THRESHOLD) +
+            return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.SHARE_APP_DIALOG_THRESHOLD) +
                     getRateAppNotificationLaunchTimeThreshold() -
                     getRateDialogLaunchTimeThreshold();
         }
-        return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.SHARE_APP_DIALOG_THRESHOLD);
+        return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.SHARE_APP_DIALOG_THRESHOLD);
     }
 
     public static long getRateDialogLaunchTimeThreshold() {
-        return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.RATE_APP_DIALOG_THRESHOLD);
+        return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.RATE_APP_DIALOG_THRESHOLD);
     }
 
     public static int getSurveyNotificationLaunchTimeThreshold() {
@@ -42,11 +40,11 @@ public class AppConfigWrapper {
     }
 
     public static boolean isPrivateModeEnabled() {
-        return FirebaseHelper.firebaseContract.getRcBoolean(FirebaseHelper.ENABLE_PRIVATE_MODE);
+        return FirebaseHelper.getFirebase().getRcBoolean(FirebaseHelper.ENABLE_PRIVATE_MODE);
     }
 
     public static boolean getMyshotUnreadEnabled() {
-        return FirebaseHelper.firebaseContract.getRcBoolean(FirebaseHelper.ENABLE_MY_SHOT_UNREAD);
+        return FirebaseHelper.getFirebase().getRcBoolean(FirebaseHelper.ENABLE_MY_SHOT_UNREAD);
     }
 
     public static boolean isSurveyNotificationEnabled() {
@@ -54,47 +52,47 @@ public class AppConfigWrapper {
     }
 
     public static String getRateAppDialogTitle() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_TITLE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_TITLE);
     }
 
     public static String getRateAppDialogContent() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_CONTENT);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_CONTENT);
     }
 
     public static String getRateAppPositiveString() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_POSITIVE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_POSITIVE);
     }
 
     public static String getRateAppNegativeString() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_NEGATIVE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.RATE_APP_DIALOG_TEXT_NEGATIVE);
     }
 
     public static String getBannerRootConfig() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.BANNER_MANIFEST);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.BANNER_MANIFEST);
     }
 
     public static long getFeatureSurvey() {
-        return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.FEATURE_SURVEY);
+        return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.FEATURE_SURVEY);
     }
 
     public static String getScreenshotCategoryUrl() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.SCREENSHOT_CATEGORY_MANIFEST);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.SCREENSHOT_CATEGORY_MANIFEST);
     }
 
     public static String getVpnRecommenderUrl() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.VPN_RECOMMENDER_URL);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.VPN_RECOMMENDER_URL);
     }
 
     public static String getVpnRecommenderPackage() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.VPN_RECOMMENDER_PACKAGE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.VPN_RECOMMENDER_PACKAGE);
     }
 
     public static long getFirstLaunchWorkerTimer() {
-        return FirebaseHelper.firebaseContract.getRcLong(FirebaseHelper.FIRST_LAUNCH_TIMER_MINUTES);
+        return FirebaseHelper.getFirebase().getRcLong(FirebaseHelper.FIRST_LAUNCH_TIMER_MINUTES);
     }
 
     public static String getFirstLaunchNotificationMessage() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.FIRST_LAUNCH_NOTIFICATION_MESSAGE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.FIRST_LAUNCH_NOTIFICATION_MESSAGE);
     }
 
     public static boolean isLifeFeedEnabled() {
@@ -102,16 +100,16 @@ public class AppConfigWrapper {
     }
 
     static String getShareAppDialogTitle() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_TITLE);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_TITLE);
     }
 
     // Only this field supports prettify
     static String getShareAppDialogContent() {
-        final String rcString = FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_CONTENT);
+        final String rcString = FirebaseHelper.getFirebase().getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_CONTENT);
         return FirebaseHelper.prettify(rcString);
     }
 
     static String getShareAppMessage() {
-        return FirebaseHelper.firebaseContract.getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_MSG);
+        return FirebaseHelper.getFirebase().getRcString(FirebaseHelper.STR_SHARE_APP_DIALOG_MSG);
     }
 }
