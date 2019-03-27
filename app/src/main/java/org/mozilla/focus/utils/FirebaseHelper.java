@@ -69,14 +69,14 @@ final public class FirebaseHelper {
     static final String STR_SHARE_APP_DIALOG_CONTENT = "str_share_app_dialog_content";
     static final String STR_SHARE_APP_DIALOG_MSG = "str_share_app_dialog_msg";
 
-    static final String NEWLINE_PLACE_HOLDER = "<BR>";
+    private static final String NEWLINE_PLACE_HOLDER = "<BR>";
 
-    @SuppressFBWarnings(value = "MS_CANNOT_BE_FINAL", justification = "Abstract class can be replaced with an empty implementation. But I'm not determined to do it.")
     private static FirebaseContract firebaseContract;
 
     private FirebaseHelper() {
     }
 
+    // the entry point to inject FirebaseContract and start the library.
     public static void init(final Context context, boolean enabled, FirebaseContract contract) {
 
         if (firebaseContract == null) {
@@ -84,20 +84,23 @@ final public class FirebaseHelper {
         }
         firebaseContract.setRemoteConfigDefault(contract.getRemoteConfigDefault());
 
-        initFirebase(context.getApplicationContext());
+        initInternal(context.getApplicationContext());
 
         enableAnalytics(context.getApplicationContext(), enabled);
 
     }
 
+    // helper method to display new line from remote config
     static String prettify(String string) {
         return string.replace(NEWLINE_PLACE_HOLDER, "\n");
     }
 
+    // provider dummy Firebase implementation
     public static FirebaseContract provideFirebaseNoOpImpl(Context context) {
         return new FirebaseNoOpImp(fromResourceString(context));
     }
 
+    // provider actual Firebase implementation
     public static FirebaseContract provideFirebaseImpl(Context context) {
         final String webId = getStringResourceByName(context, FIREBASE_WEB_ID);
         final String dbUrl = getStringResourceByName(context, FIREBASE_DB_URL);
@@ -105,6 +108,7 @@ final public class FirebaseHelper {
         final String appId = getStringResourceByName(context, FIREBASE_APP_ID);
         final String apiKey = getStringResourceByName(context, FIREBASE_API_KEY);
         final String projectId = getStringResourceByName(context, FIREBASE_PROJECT_ID);
+        // Firebase will use those resources before initialized. Check them first.
         if (webId.isEmpty() || dbUrl.isEmpty() || crashReport.isEmpty() ||
                 appId.isEmpty() || apiKey.isEmpty() || projectId.isEmpty()) {
             throw new IllegalStateException("Firebase related keys are not set");
@@ -133,7 +137,8 @@ final public class FirebaseHelper {
         firebaseContract.enableAnalytics(applicationContext, enable);
     }
 
-    private static void initFirebase(final Context applicationContext) {
+    // all components required for app to function.
+    private static void initInternal(final Context applicationContext) {
 
         checkFirebaseInitState();
 
@@ -174,7 +179,7 @@ final public class FirebaseHelper {
         }
     }
 
-    static HashMap<String, Object> fromResourceString(Context context) {
+    private static HashMap<String, Object> fromResourceString(Context context) {
         final HashMap<String, Object> map = new HashMap<>();
         if (context != null) {
             map.put(FirebaseHelper.RATE_APP_DIALOG_TEXT_TITLE, context.getString(R.string.rate_app_dialog_text_title, context.getString(R.string.app_name)));
