@@ -96,7 +96,7 @@ public class AppConfigWrapper {
     }
 
     public static boolean isLifeFeedEnabled() {
-        return FirebaseHelper.firebaseContract.getRcBoolean(FirebaseHelper.ENABLE_LIFE_FEED);
+        return FirebaseHelper.getFirebase().getRcBoolean(FirebaseHelper.ENABLE_LIFE_FEED);
     }
 
     static String getShareAppDialogTitle() {
